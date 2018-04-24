@@ -1,0 +1,25 @@
+.sickBed-wrapper{
+    margin: 20px 50px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,.15);
+    border-radius: 2px;
+}
+.condition-wrapper{
+    padding: 10px 50px;
+}
+.condition-wrapper .ant-cascader-picker{
+    width: 300px;
+    margin-right: 10px;
+}
+.sickBed-wrapper .ant-table-thead  tr th,.sickBed-wrapper .ant-table-tbody  tr td{
+    text-align: center;
+}
+.sickBed-wrapper .ant-pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+.upload-excel{
+    display: inline-block;
+    float: right;
+}

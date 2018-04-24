@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import style from './index.module.scss'
 import { Form, Icon, Input, Button } from 'antd';
+import {Link} from 'react-router-dom'
+import {Modal} from "antd/lib/index";
 const FormItem = Form.Item;
 
 function hasErrors(fieldsError) {
@@ -17,9 +19,41 @@ class HorizontalLoginForm extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
+
+                //登录
+                this.handleAjax("/login.do",values,(result) => {
+                    console.log(result)
+                    if(result.result === true){
+                        // this.props.getTodayMenuList(todayMenuList.data.dishesList);
+                        // this.props.getPageData(todayMenuList.data.page);
+                        // window.location.href = "/
+                        window.location.replace("/todayMenu");
+                    }else{
+                        Modal.error({
+                            title: result.msg
+                        });
+                    }
+                },"post")
+
             }
         });
     }
+
+    //ajax请求
+    handleAjax(url, options, successHandle, requestType){
+        requestType = requestType || "get";
+        $.ajax({
+            type:requestType,
+            url: url,
+            dataType:'json',
+            data:options,
+            cache: false,
+            success: (result)=>{
+                successHandle(result);
+            }
+        });
+    }
+
     render() {
         const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
 
@@ -32,10 +66,20 @@ class HorizontalLoginForm extends React.Component {
                     validateStatus={userNameError ? 'error' : ''}
                     help={userNameError || ''}
                 >
-                    {getFieldDecorator('userName', {
-                        rules: [{ required: true, message: 'Please input your username!' }],
+                    {getFieldDecorator('hid', {
+                        rules: [{ required: true, message: '请输入医院id!' }],
                     })(
-                        <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
+                        <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="医院ID" />
+                    )}
+                </FormItem>
+                <FormItem
+                    validateStatus={userNameError ? 'error' : ''}
+                    help={userNameError || ''}
+                >
+                    {getFieldDecorator('account', {
+                        rules: [{ required: true, message: '请输入账号!' }],
+                    })(
+                        <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="账号" />
                     )}
                 </FormItem>
                 <FormItem
@@ -43,9 +87,9 @@ class HorizontalLoginForm extends React.Component {
                     help={passwordError || ''}
                 >
                     {getFieldDecorator('password', {
-                        rules: [{ required: true, message: 'Please input your Password!' }],
+                        rules: [{ required: true, message: '请输入密码!' }],
                     })(
-                        <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
+                        <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="密码" />
                     )}
                 </FormItem>
                 <FormItem>
@@ -54,7 +98,7 @@ class HorizontalLoginForm extends React.Component {
                         htmlType="submit"
                         disabled={hasErrors(getFieldsError())}
                     >
-                        Log in
+                        登录
                     </Button>
                 </FormItem>
             </Form>
